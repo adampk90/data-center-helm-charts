@@ -58,21 +58,28 @@ spec:
       resources:
       {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.testPods.containerSecurityContext }}
+      securityContext:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
   volumes:
     {{ include "confluence.volumes.sharedHome" . | nindent 4 }}
-  restartPolicy: Never
   {{- with .Values.testPods.nodeSelector }}
   nodeSelector:
-  {{- toYaml . | nindent 8 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.testPods.affinity }}
   affinity:
-  {{- toYaml . | nindent 8 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.testPods.tolerations }}
   tolerations:
-  {{- toYaml . | nindent 8 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- if .Values.testPods.schedulerName }}
   schedulerName: {{ .Values.testPods.schedulerName  | quote }}
+  {{- end }}
+  {{- with .Values.testPods.securityContext }}
+  securityContext:
+  {{ toYaml . | nindent 4 }}
   {{- end }}
