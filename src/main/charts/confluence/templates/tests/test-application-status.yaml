@@ -35,6 +35,10 @@ spec:
           STATUS=$(curl -s "$STATUS_URL")
           echo "Verifying application state is RUNNING or FIRST_RUN: $STATUS"
           echo $STATUS | jq -e '.state|test("RUNNING|FIRST_RUN")'
+      {{- with .Values.testPods.containerSecurityContext }}
+      securityContext:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.testPods.resources }}
       resources:
       {{- toYaml . | nindent 8 }}
@@ -42,16 +46,20 @@ spec:
   restartPolicy: Never
   {{- with .Values.testPods.nodeSelector }}
   nodeSelector:
-  {{- toYaml . | nindent 8 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.testPods.affinity }}
   affinity:
-  {{- toYaml . | nindent 8 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.testPods.tolerations }}
   tolerations:
-  {{- toYaml . | nindent 8 }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- if .Values.testPods.schedulerName }}
   schedulerName: {{ .Values.testPods.schedulerName  | quote }}
+  {{- end }}
+  {{- with .Values.testPods.securityContext }}
+  securityContext:
+  {{ toYaml . | nindent 4 }}
   {{- end }}
