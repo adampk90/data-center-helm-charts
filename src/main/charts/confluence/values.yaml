@@ -1740,6 +1740,8 @@ testPods:
   image:
     permissionsTestContainer: debian:stable-slim
     statusTestContainer: alpine:latest
+  containerSecurityContext: {}
+  securityContext: {}
 
 openshift:
 
